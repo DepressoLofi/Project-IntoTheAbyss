@@ -26,7 +26,7 @@ namespace intoTheAbyss_input
                 VirtualInputManager.Instance.moveLeft = false;
             }
 
-            if (Input.GetKey(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 VirtualInputManager.Instance.jump = true;
             }

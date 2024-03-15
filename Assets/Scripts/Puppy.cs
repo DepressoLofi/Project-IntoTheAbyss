@@ -7,9 +7,12 @@ namespace intoTheAbyss_input
     public class Puppy : MonoBehaviour
     {
         public float speed;
-        public float JumpForce;
+        public float jumpForce;
 
         private Rigidbody rigid;
+
+        [Header("Ground")]
+        public bool grounded = true;
 
         private void Start()
         {
@@ -31,7 +34,7 @@ namespace intoTheAbyss_input
 
             }
 
-            if (VirtualInputManager.Instance.jump)
+            if (VirtualInputManager.Instance.jump && grounded)
             {
                 Jump();
             }
@@ -40,8 +43,24 @@ namespace intoTheAbyss_input
 
         void Jump()
         {
-            rigid.AddForce(Vector3.up * JumpForce);
+            rigid.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
 
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.CompareTag("Ground"))
+            {
+                grounded = true;
+            } 
+        }
+
+        private void OnCollisionExit(Collision collision)
+        {
+            if (collision.gameObject.CompareTag("Ground"))
+            {
+                grounded = false;
+            }
         }
     }
 
