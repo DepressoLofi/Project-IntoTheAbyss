@@ -2,68 +2,66 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace intoTheAbyss_input
+public class Puppy : MonoBehaviour
 {
-    public class Puppy : MonoBehaviour
+    // status
+    public float speed;
+    public float jumpForce;
+
+    // some components
+    private Rigidbody rigid;
+    private Transform shootPoint;
+    private Collider puppyCollider;
+
+
+    //checkers 
+    [Header("Ground")]
+    [SerializeField] private bool grounded = true;
+    public LayerMask whatIsGround;
+
+    //shooting
+    private float shootCooldown = 0.4f;
+
+    private void Awake()
     {
-        public float speed;
-        public float jumpForce;
+        rigid = GetComponent<Rigidbody>();
+        shootPoint = transform.Find("ShootPoint");
+        puppyCollider = GetComponent<Collider>();
 
-        private Rigidbody rigid;
+    }
 
-        [Header("Ground")]
-        public bool grounded = true;
+    void Update()
+    {
+        grounded = Physics.Raycast(transform.position, Vector3.down, 1 * 0.5f + 0.29f, whatIsGround);
 
-        private void Start()
+
+        if (VirtualInputManager.Instance.moveRight)
         {
-            rigid = GetComponent<Rigidbody>();
+            this.gameObject.transform.Translate(Vector3.forward * speed * Time.deltaTime);
+            shootPoint.localPosition = new Vector3(0, 0, 0.94f);
+            shootPoint.localRotation = Quaternion.identity;
         }
 
-        void Update()
+        if (VirtualInputManager.Instance.moveLeft)
         {
-            if (VirtualInputManager.Instance.moveRight)
-            {
-                this.gameObject.transform.Translate(Vector3.forward * speed * Time.deltaTime);
-
-            }
-
-
-            if (VirtualInputManager.Instance.moveLeft)
-            {
-                this.gameObject.transform.Translate(-Vector3.forward * speed * Time.deltaTime);
-
-            }
-
-            if (VirtualInputManager.Instance.jump && grounded)
-            {
-                Jump();
-            }
-
+            this.gameObject.transform.Translate(-Vector3.forward * speed * Time.deltaTime);
+            shootPoint.localPosition = new Vector3(0, 0, -0.94f);
+            shootPoint.localRotation = Quaternion.Euler(0f, 180f, 0f);
         }
 
-        void Jump()
+        if (VirtualInputManager.Instance.jump && grounded)
         {
-            rigid.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
-
+            Jump();
         }
 
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (collision.gameObject.CompareTag("Ground"))
-            {
-                grounded = true;
-            } 
-        }
+    }
 
-        private void OnCollisionExit(Collision collision)
-        {
-            if (collision.gameObject.CompareTag("Ground"))
-            {
-                grounded = false;
-            }
-        }
+    void Jump()
+    {
+
+        rigid.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
+
     }
 
 
 }
-
