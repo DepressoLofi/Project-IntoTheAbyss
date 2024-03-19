@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VirtualInputManager : MonoBehaviour
+public class InputManager : MonoBehaviour
 {
-    public static VirtualInputManager Instance = null;
+    public static InputManager Instance = null;
 
     private void Awake()
     {
@@ -23,5 +23,3 @@ public class VirtualInputManager : MonoBehaviour
     public bool jump;
     public bool shoot;
 }
-
-

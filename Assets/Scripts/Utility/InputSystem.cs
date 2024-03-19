@@ -2,49 +2,46 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KeyboardInput : MonoBehaviour
+public class InputSystem : MonoBehaviour
 {
     void Update()
     {
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            VirtualInputManager.Instance.moveRight = true;
+            InputManager.Instance.moveRight = true;
         }
         else
         {
-            VirtualInputManager.Instance.moveRight = false;
+            InputManager.Instance.moveRight = false;
         }
 
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            VirtualInputManager.Instance.moveLeft = true;
+            InputManager.Instance.moveLeft = true;
         }
         else
         {
-            VirtualInputManager.Instance.moveLeft = false;
+            InputManager.Instance.moveLeft = false;
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            VirtualInputManager.Instance.jump = true;
+            InputManager.Instance.jump = true;
         }
         else
         {
-            VirtualInputManager.Instance.jump = false;
+            InputManager.Instance.jump = false;
         }
 
         if (Input.GetKeyDown(KeyCode.X))
         {
-            VirtualInputManager.Instance.shoot = true;
+            InputManager.Instance.shoot = true;
         }
         else
         {
-            VirtualInputManager.Instance.shoot = false;
+            InputManager.Instance.shoot = false;
         }
     }
+
+
 }
-
-
-
-
-

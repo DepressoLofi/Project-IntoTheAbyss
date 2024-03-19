@@ -7,6 +7,7 @@ public class Puppy : MonoBehaviour
     // status
     public float speed;
     public float jumpForce;
+    
 
     // some components
     private Rigidbody rigid;
@@ -18,6 +19,7 @@ public class Puppy : MonoBehaviour
     [Header("Ground")]
     [SerializeField] private bool grounded = true;
     public LayerMask whatIsGround;
+    [SerializeField] private bool doubleJump;
 
     //shooting
     private float shootCooldown = 0.4f;
@@ -34,33 +36,42 @@ public class Puppy : MonoBehaviour
     {
         grounded = Physics.Raycast(transform.position, Vector3.down, 1 * 0.5f + 0.29f, whatIsGround);
 
+        if (grounded) {
+            doubleJump = true;
+        } 
 
-        if (VirtualInputManager.Instance.moveRight)
+
+        if (InputManager.Instance.moveRight)
         {
             this.gameObject.transform.Translate(Vector3.forward * speed * Time.deltaTime);
             shootPoint.localPosition = new Vector3(0, 0, 0.94f);
             shootPoint.localRotation = Quaternion.identity;
         }
 
-        if (VirtualInputManager.Instance.moveLeft)
+        if (InputManager.Instance.moveLeft)
         {
             this.gameObject.transform.Translate(-Vector3.forward * speed * Time.deltaTime);
             shootPoint.localPosition = new Vector3(0, 0, -0.94f);
             shootPoint.localRotation = Quaternion.Euler(0f, 180f, 0f);
         }
 
-        if (VirtualInputManager.Instance.jump && grounded)
+        if (InputManager.Instance.jump)
         {
-            Jump();
+            if (grounded)
+            {
+                rigid.velocity = new Vector3(rigid.velocity.x, jumpForce, rigid.velocity.z);
+            }
+            else if(doubleJump)
+            {
+                rigid.velocity = new Vector3(rigid.velocity.x, jumpForce, rigid.velocity.z);
+                doubleJump = false;
+            }
+
         }
-
-    }
-
-    void Jump()
-    {
-
-        rigid.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
-
+        if (InputManager.Instance.jump && rigid.velocity.y > 0f)
+        {
+            rigid.velocity = new Vector3(rigid.velocity.x, rigid.velocity.y * 0.5f, rigid.velocity.z);
+        }
     }
 
 
