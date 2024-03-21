@@ -7,6 +7,8 @@ public class Puppy : MonoBehaviour
     // status
     public float speed;
     public float jumpForce;
+    public float fallMultiplier;
+    public float pullMultiplier;
     
 
     // some components
@@ -21,11 +23,12 @@ public class Puppy : MonoBehaviour
     public LayerMask whatIsGround;
     [SerializeField] private bool doubleJump;
 
-    //shooting
-    private float shootCooldown = 0.4f;
 
+
+   
     private void Awake()
     {
+
         rigid = GetComponent<Rigidbody>();
         shootPoint = transform.Find("ShootPoint");
         puppyCollider = GetComponent<Collider>();
@@ -59,20 +62,37 @@ public class Puppy : MonoBehaviour
         {
             if (grounded)
             {
-                rigid.velocity = new Vector3(rigid.velocity.x, jumpForce, rigid.velocity.z);
+                rigid.velocity = Vector3.up * jumpForce;
             }
             else if(doubleJump)
             {
-                rigid.velocity = new Vector3(rigid.velocity.x, jumpForce, rigid.velocity.z);
+                rigid.velocity = Vector3.up * jumpForce;
                 doubleJump = false;
             }
 
         }
-        if (InputManager.Instance.jump && rigid.velocity.y > 0f)
+
+        
+
+    }
+
+    private void FixedUpdate()
+    {
+        if (rigid.velocity.y < 0)
         {
-            rigid.velocity = new Vector3(rigid.velocity.x, rigid.velocity.y * 0.5f, rigid.velocity.z);
+            rigid.velocity += (-Vector3.up * fallMultiplier);
+        }
+
+        if (rigid.velocity.y > 0f)
+        {
+            rigid.velocity += (-Vector3.up * pullMultiplier);
+
         }
     }
 
+    void Jump()
+    {
+
+    }
 
 }
