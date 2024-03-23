@@ -1,15 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class Puppy : MonoBehaviour
 {
-    // status
+    [Header("Status")]
     public float speed;
     public float jumpForce;
     public float fallMultiplier;
     public float pullMultiplier;
-    
+
+    [SerializeField] private CinemachineVirtualCamera vcm;
 
     // some components
     private Rigidbody rigid;
@@ -19,13 +21,12 @@ public class Puppy : MonoBehaviour
 
     //checkers 
     [Header("Ground")]
-    [SerializeField] private bool grounded = true;
-    public LayerMask whatIsGround;
+    [SerializeField] private bool grounded;
     [SerializeField] private bool doubleJump;
+    public LayerMask whatIsGround;
 
 
 
-   
     private void Awake()
     {
 
@@ -49,6 +50,7 @@ public class Puppy : MonoBehaviour
             this.gameObject.transform.Translate(Vector3.forward * speed * Time.deltaTime);
             shootPoint.localPosition = new Vector3(0, 0, 0.94f);
             shootPoint.localRotation = Quaternion.identity;
+            vcm.GetCinemachineComponent<CinemachineFramingTransposer>().m_TrackedObjectOffset.z = 1f;
         }
 
         if (InputManager.Instance.moveLeft)
@@ -56,17 +58,18 @@ public class Puppy : MonoBehaviour
             this.gameObject.transform.Translate(-Vector3.forward * speed * Time.deltaTime);
             shootPoint.localPosition = new Vector3(0, 0, -0.94f);
             shootPoint.localRotation = Quaternion.Euler(0f, 180f, 0f);
+            vcm.GetCinemachineComponent<CinemachineFramingTransposer>().m_TrackedObjectOffset.z = -1f;
         }
 
         if (InputManager.Instance.jump)
         {
             if (grounded)
             {
-                rigid.velocity = Vector3.up * jumpForce;
+                Jump();
             }
             else if(doubleJump)
             {
-                rigid.velocity = Vector3.up * jumpForce;
+                Jump();
                 doubleJump = false;
             }
 
@@ -92,6 +95,7 @@ public class Puppy : MonoBehaviour
 
     void Jump()
     {
+        rigid.velocity = Vector3.up * jumpForce;
 
     }
 
