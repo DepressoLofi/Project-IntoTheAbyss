@@ -18,11 +18,15 @@ public class PuppyShoot : MonoBehaviour
 
     void Update()
     {
-        if (InputManager.Instance.shoot && Time.time >= timeToFire)
+        if (GameStateManager.Instance.canInput && GameStateManager.Instance.havePower)
         {
-            timeToFire = Time.time + 1 / effectToSpawn.GetComponent<ProjectileMove>().fireRate;
-            SpawnVFX();
+            if (Input.GetKeyDown(KeyCode.X) && Time.time >= timeToFire)
+            {
+                timeToFire = Time.time + 1 / effectToSpawn.GetComponent<ProjectileMove>().fireRate;
+                SpawnVFX();
+            }
         }
+        
     }
 
     void SpawnVFX()
@@ -33,12 +37,6 @@ public class PuppyShoot : MonoBehaviour
             vfx = Instantiate(effectToSpawn, shootPoint.position, shootPoint.rotation);
             Destroy(vfx, 1f);
 
-        } else
-        {
-            Debug.Log("No Shoot Point");
-        }
+        } 
     }
-
-
-
 }
