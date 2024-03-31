@@ -14,6 +14,7 @@ public class PuppyMovement : MonoBehaviour
 
     [Header("Camera")]
     [SerializeField] private CinemachineVirtualCamera vcm;
+    private bool direction; //false is left, true is right
 
     //some components 
     private Rigidbody rigid;
@@ -27,6 +28,7 @@ public class PuppyMovement : MonoBehaviour
     [SerializeField] private bool grounded;
     [SerializeField] private bool doubleJump;
     public LayerMask whatIsGround;
+    public bool onPlatform;
 
     [Header("Slope Handling")]
     public float maxSlopeAngle;
@@ -37,6 +39,7 @@ public class PuppyMovement : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody>();
         puppyCollider = GetComponent<Collider>();
+        onPlatform = false;
     }
 
 
@@ -66,14 +69,39 @@ public class PuppyMovement : MonoBehaviour
             //move right
             shootPoint.localPosition = new Vector3(0, 0, 0.94f);
             shootPoint.localRotation = Quaternion.identity;
-            vcm.GetCinemachineComponent<CinemachineFramingTransposer>().m_TrackedObjectOffset.z = 1f;
+            direction = true; //right
+            
 
         } else if(movement.z < 0)
         {
             //move left
             shootPoint.localPosition = new Vector3(0, 0, -0.94f);
             shootPoint.localRotation = Quaternion.Euler(0f, 180f, 0f);
-            vcm.GetCinemachineComponent<CinemachineFramingTransposer>().m_TrackedObjectOffset.z = -1f;
+            direction = false;
+
+        }
+
+        if (direction)
+        {
+            float targetOffset = 1f;
+            Vector3 targetPosition = new Vector3(0, 0, 0.94f);
+            Quaternion targetRotation = Quaternion.identity;
+            SmoothlyChangeOffset(targetOffset, targetPosition, targetRotation);
+        } else
+        {
+            float targetOffset = -1f;
+            Vector3 targetPosition = new Vector3(0, 0, -0.94f);
+            Quaternion targetRotation = Quaternion.Euler(0f, 180f, 0f);
+            SmoothlyChangeOffset(targetOffset, targetPosition, targetRotation);
+        }
+
+        if (GameStateManager.Instance.freeze)
+        {
+            rigid.constraints |= RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
+        }
+        else
+        {
+            rigid.constraints &= ~(RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ);
         }
 
         MyInput();
@@ -116,7 +144,11 @@ public class PuppyMovement : MonoBehaviour
 
     private void MovePlayer()
     {
-        if (OnSlope())
+        if (onPlatform)
+        {
+            transform.Translate(speed * Time.deltaTime * movement);
+        }
+        else if (OnSlope())
         {
             rigid.MovePosition(rigid.position + GetSlopeMoveDirection() * speed * Time.deltaTime);
         } else
@@ -159,5 +191,16 @@ public class PuppyMovement : MonoBehaviour
         return Vector3.ProjectOnPlane(movement, slopeHit.normal).normalized;
     }
 
+    void SmoothlyChangeOffset(float targetOffset, Vector3 targetPosition, Quaternion targetRotation)
+    {
+        CinemachineFramingTransposer transposer = vcm.GetCinemachineComponent<CinemachineFramingTransposer>();
+
+
+        transposer.m_TrackedObjectOffset.z = Mathf.Lerp(transposer.m_TrackedObjectOffset.z, targetOffset, Time.deltaTime * 5f);
+
+
+        shootPoint.localPosition = Vector3.Lerp(shootPoint.localPosition, targetPosition, Time.deltaTime * 5f);
+        shootPoint.localRotation = Quaternion.Lerp(shootPoint.localRotation, targetRotation, Time.deltaTime * 5f);
+    }
 
 }
