@@ -12,6 +12,10 @@ public class Puppy : MonoBehaviour
     [SerializeField] private Vector3 lastCheckPoint;
     [SerializeField] private bool alive;
 
+    [Header("Collect")]
+    public int star;
+    public StarSystem starSystem;
+
     MeshRenderer meshRenderer;
 
     private void Awake()
@@ -25,32 +29,29 @@ public class Puppy : MonoBehaviour
         lastCheckPoint = transform.position;
     }
 
-    void Update()
+    public void SetCheckpoint(Vector3 newPoint)
     {
+        lastCheckPoint = newPoint;
         
-
-        
-
-    }
-
-    private void FixedUpdate()
-    {
-        
-    }
-
-    private void SetCheckpoint()
-    {
-
     }
 
     private void Die()
     {
         meshRenderer.enabled = false;
         alive = false;
-        lifeCount -= 1;
         alive = false;
         GameStateManager.Instance.PuppyDied();
-        StartCoroutine(Respawn(0.5f));
+        lifeCount -= 1;
+        if (lifeCount > 0)
+        {
+            StartCoroutine(Respawn(0.5f));
+        }
+        else
+        {
+            //add game over script
+            Debug.Log("You ran out of life");
+        }
+        
     }
 
     IEnumerator Respawn(float duration)
@@ -66,10 +67,24 @@ public class Puppy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Obstacle"))
+        if (other.CompareTag("Obstacle") || other.CompareTag("Monster"))
         {
             Die();
         }
+        if (other.CompareTag("Star"))
+        {
+            CollectableStars collectableStars = other.GetComponent<CollectableStars>();
+            collectableStars.IsCollected();
+            star++;
+            if (starSystem != null)
+            {
+                starSystem.IncreaseStarCount(star);
+
+            }
+
+
+        }
+
     }
 
 }

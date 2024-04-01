@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ground
   - Obstacle
+  - Monster
+  - Star
   layers:
   - Default
   - TransparentFX
