@@ -17,10 +17,13 @@ public class Puppy : MonoBehaviour
     public StarSystem starSystem;
 
     MeshRenderer meshRenderer;
+    Rigidbody rb;
+    private Collider puppyCollider;
 
     private void Awake()
     {
         meshRenderer = GetComponent<MeshRenderer>();
+        puppyCollider = GetComponent<Collider>();
     }
     private void Start()
     {
@@ -37,6 +40,7 @@ public class Puppy : MonoBehaviour
 
     private void Die()
     {
+        puppyCollider.enabled = false;
         meshRenderer.enabled = false;
         alive = false;
         alive = false;
@@ -61,13 +65,14 @@ public class Puppy : MonoBehaviour
         transform.position = lastCheckPoint;
         alive = true;
         GameStateManager.Instance.PuppyRevived();
+        puppyCollider.enabled = true;
         meshRenderer.enabled = true;
 
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Obstacle") || other.CompareTag("Monster"))
+        if (other.CompareTag("Obstacle"))
         {
             Die();
         }
@@ -79,12 +84,16 @@ public class Puppy : MonoBehaviour
             if (starSystem != null)
             {
                 starSystem.IncreaseStarCount(star);
-
             }
-
-
         }
+    }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Monster"))
+        {
+            Die();
+        }
     }
 
 }
