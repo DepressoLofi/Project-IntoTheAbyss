@@ -10,14 +10,14 @@ public class Puppy : MonoBehaviour
     [Header("Status")]
     [SerializeField]private int lifeCount;
     [SerializeField] private Vector3 lastCheckPoint;
-    [SerializeField] private bool alive;
+    [SerializeField] public bool alive;
 
     [Header("Collect")]
     public int star;
     public StarSystem starSystem;
 
     MeshRenderer meshRenderer;
-    Rigidbody rb;
+
     private Collider puppyCollider;
 
     private void Awake()
@@ -42,7 +42,6 @@ public class Puppy : MonoBehaviour
     {
         puppyCollider.enabled = false;
         meshRenderer.enabled = false;
-        alive = false;
         alive = false;
         GameStateManager.Instance.PuppyDied();
         lifeCount -= 1;

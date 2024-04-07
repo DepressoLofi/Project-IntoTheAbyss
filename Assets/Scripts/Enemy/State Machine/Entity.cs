@@ -80,7 +80,28 @@ public class Entity : MonoBehaviour
 
     public virtual bool CheckPlayerInAgroRange()
     {
-        return Physics.Raycast(playerCheck.position, mesh.transform.forward, entityData.agroDistance, entityData.whatIsPlayer);
+        RaycastHit hit;
+        if (Physics.Raycast(playerCheck.position, mesh.transform.forward, out hit, entityData.agroDistance, entityData.whatIsPlayer))
+        {
+            Puppy puppy = hit.collider.GetComponent<Puppy>();
+
+            if (puppy != null)
+            {
+                if (puppy.alive)
+                {
+                    return true;
+                } else
+                {
+                    return false;
+                }
+            } else
+            {
+                return false;
+            }
+        } else
+        {
+            return false;
+        }
     }
 
 

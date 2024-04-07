@@ -28,11 +28,6 @@ public class E1_PlayerDetectedState : PlayerDetectedState
         {
             stateMachine.ChangeState(enemy.chargeState);
         }
-        else if (!isPlayerInAgroRange)
-        {
-            enemy.idleState.SetTurnAfterIdle(false);
-            stateMachine.ChangeState(enemy.idleState);
-        }
     }
 
     public override void PhysicsUpdate()
