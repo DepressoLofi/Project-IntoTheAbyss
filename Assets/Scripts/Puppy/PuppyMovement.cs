@@ -14,7 +14,7 @@ public class PuppyMovement : MonoBehaviour
 
     [Header("Camera")]
     [SerializeField] private CinemachineVirtualCamera vcm;
-    private bool direction; //false is left, true is right
+    public bool direction; //false is left, true is right
 
     //some components 
     private Rigidbody rigid;

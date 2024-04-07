@@ -14,9 +14,11 @@ GameObject:
   - component: {fileID: 8595349160787064679}
   - component: {fileID: 8595349160787064682}
   - component: {fileID: 8595349160787064681}
-  m_Layer: 0
+  - component: {fileID: 276260153}
+  - component: {fileID: 276260160}
+  m_Layer: 8
   m_Name: Puppy
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -36,7 +38,7 @@ Transform:
   - {fileID: 8595349162020514628}
   - {fileID: 9065846772199355734}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8595349160787064677
 MeshFilter:
@@ -66,7 +68,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: efc12c4a91aa4634189aa44628b47f0b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -117,7 +119,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8595349160787064672}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 2
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -151,6 +153,51 @@ MonoBehaviour:
   shootPoint: {fileID: 8595349162020514628}
   vfx:
   - {fileID: 8944310425683229904, guid: 522ac4f6d2102ec40a36ef918e49b3ad, type: 3}
+--- !u!114 &276260153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8595349160787064672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 568927bf1e28f6847a7f51e83085deb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 8
+  jumpForce: 20
+  fallMultiplier: 0.6
+  pullMultiplier: 1
+  vcm: {fileID: 0}
+  direction: 1
+  jumpVFX: {fileID: 4629985827649035784, guid: 24d7c2344baf8074b991fab3ee493529, type: 3}
+  jumpPoint: {fileID: 9065846772199355734}
+  shootPoint: {fileID: 8595349162020514628}
+  grounded: 0
+  doubleJump: 0
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 72
+  onPlatform: 0
+  maxSlopeAngle: 40
+--- !u!114 &276260160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8595349160787064672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f218b92a126f6784f8dff6acf1dbaacd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifeCount: 0
+  lastCheckPoint: {x: 0, y: 0, z: 0}
+  alive: 0
+  star: 0
+  starSystem: {fileID: 0}
 --- !u!1 &8595349162020514629
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,7 +253,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9065846772199355733}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.59, z: 0}
+  m_LocalPosition: {x: 0, y: -0.33, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
