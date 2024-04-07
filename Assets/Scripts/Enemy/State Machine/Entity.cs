@@ -16,8 +16,8 @@ public class Entity : MonoBehaviour
     public GameObject mesh { get; private set; }
 
     [SerializeField] private Transform wallCheck;
-
     [SerializeField] private Transform ledgeCheck;
+    [SerializeField] private Transform playerCheck;
 
     private Vector3 velocityWorkspace;
     private int currentHealth;
@@ -76,8 +76,13 @@ public class Entity : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
     }
+
+    public virtual bool CheckPlayerInAgroRange()
+    {
+        return Physics.Raycast(playerCheck.position, mesh.transform.forward, entityData.agroDistance, entityData.whatIsPlayer);
+    }
+
 
     public virtual void OnDrawGizmos()
     {

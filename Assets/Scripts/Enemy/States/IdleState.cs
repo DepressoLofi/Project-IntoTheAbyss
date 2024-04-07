@@ -8,6 +8,7 @@ public class IdleState : State
 
     protected bool turnAfterIdle;
     protected bool isIdleTimeOver;
+    protected bool isPlayerInAgroRange;
 
     protected float idleTime;
     public IdleState(Entity entity, FiniteStateMachine stateMachine, D_IdleState stateData) : base(entity, stateMachine)
@@ -21,6 +22,7 @@ public class IdleState : State
 
         entity.SetVelocity(0f);
         isIdleTimeOver = false;
+        
         SetRandomIdleTime();
     }
 
@@ -47,6 +49,12 @@ public class IdleState : State
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
+    }
+
+    public override void DoChecks()
+    {
+        base.DoChecks();
+        isPlayerInAgroRange = entity.CheckPlayerInAgroRange();
     }
 
     public void SetTurnAfterIdle(bool turn)

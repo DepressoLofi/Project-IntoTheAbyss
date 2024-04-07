@@ -21,6 +21,7 @@ public class State
     public virtual void Enter()
     {
         startTime = Time.time;
+        DoChecks();
         //add anim
     }
 
@@ -31,10 +32,15 @@ public class State
 
     public virtual void LogicUpdate()
     {
-
+        DoChecks();
     }
 
     public virtual void PhysicsUpdate()
+    {
+
+    }
+
+    public virtual void DoChecks()
     {
 
     }

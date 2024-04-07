@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: E1_IdleState
   m_EditorClassIdentifier: 
   minIdleTime: 0.1
-  maxIdleTime: 0.4
+  maxIdleTime: 0.8

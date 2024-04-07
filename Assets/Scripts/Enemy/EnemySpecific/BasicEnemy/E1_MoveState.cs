@@ -24,18 +24,26 @@ public class E1_MoveState : MoveState
     {
         base.LogicUpdate();
 
-        if (isDetectingWall || !isDetectingLedge)
+        if (isPlayerInAgroRange)
         {
-            enemy.idleState.SetTurnAfterIdle(true);
-            stateMachine.ChangeState(enemy.idleState);
+            stateMachine.ChangeState(enemy.playerDetectedState);
         }
-        else {
-            entity.SetVelocity(stateData.movementSpeed);
-        }
+
+
     }
 
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
+        if (isDetectingWall || !isDetectingLedge)
+        {
+            enemy.idleState.SetTurnAfterIdle(true);
+            stateMachine.ChangeState(enemy.idleState);
+        }
+        else
+        {
+            entity.SetVelocity(stateData.movementSpeed);
+        }
+        
     }
 }
